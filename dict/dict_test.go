@@ -1,6 +1,8 @@
 package dict
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestAdd(t *testing.T) {
 	t.Run("add new word to dict", func(t *testing.T) {
@@ -12,6 +14,45 @@ func TestAdd(t *testing.T) {
 		dictionary.Add(word, definition)
 
 		assertDefinition(t, dictionary, word, definition)
+	})
+
+	t.Run("add existing word to dict", func(t *testing.T) {
+		word := "test"
+		definition := "this is just a test"
+		dictionary := Dictionary{word: definition}
+
+		err := dictionary.Add(word, definition)
+
+		assertError(t, err, ErrWordExists)
+		assertDefinition(t, dictionary, word, definition)
+
+	})
+
+}
+
+func TestUpdate(t *testing.T) {
+
+	t.Run("existing word", func(t *testing.T) {
+
+		word := "test"
+		definition := "this is just a test"
+		dictionary := Dictionary{word: definition}
+		newDefinition := "new definition"
+
+		dictionary.Update(word, newDefinition)
+		assertDefinition(t, dictionary, word, newDefinition)
+
+	})
+
+	t.Run("new word", func(t *testing.T) {
+
+		word := "test"
+		definition := "this is just a test"
+		dictionary := Dictionary{}
+
+		err := dictionary.Update(word, definition)
+
+		assertError(t, err, ErrWordDoesNotExist)
 	})
 
 }
@@ -35,6 +76,23 @@ func TestSearch(t *testing.T) {
 	})
 }
 
+func TestDelete(t *testing.T) {
+
+	t.Run("Delete existing word", func(t *testing.T) {
+
+		word := "test"
+		definition := "this is just a test"
+		dictionary := Dictionary{word: definition}
+		dictionary.Delete(word)
+
+		_, err := dictionary.Search("test")
+
+		if err != ErrNotFound {
+			t.Errorf("Expected %q to be deleted", word)
+		}
+	})
+}
+
 func assertStrings(t *testing.T, got, want string) {
 	t.Helper()
 
@@ -48,6 +106,12 @@ func assertError(t *testing.T, got, want error) {
 
 	if got != want {
 		t.Errorf("got error %q want %q", got, want)
+	}
+	if got == nil {
+		if want == nil {
+			return
+		}
+		t.Fatal("expected to get an error.")
 	}
 }
 

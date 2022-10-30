@@ -29,3 +29,30 @@ go get -u github.com/kisielk/errcheck
 
 
 errcheck .
+
+
+constant errors
+https://dave.cheney.net/2016/04/07/constant-errors
+
+
+https://blog.cleancoder.com/uncle-bob/2014/05/10/WhenToMock.html
+https://blog.cleancoder.com/uncle-bob/2014/05/14/TheLittleMocker.html
+
+
+check race condition 
+go test -race
+
+
+## Reflaction
+
+[laws of reflection](https://go.dev/blog/laws-of-reflection)
+
+
+use `go vet`
+
+Remember to use go vet in your build scripts as it can alert you to some subtle bugs in your code before they hit your poor users.
+
+[Mutex or Channel](https://github.com/golang/go/wiki/MutexOrChannel)
+
+* Use channels when passing ownership of data
+* Use mutexes for managing state

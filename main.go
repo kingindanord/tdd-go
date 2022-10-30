@@ -1,6 +1,11 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+	"tdd/mock"
+	"time"
+)
 
 const spanish = "Spanish"
 const french = "French"
@@ -30,5 +35,13 @@ func greetingPrefix(language string) (prefix string) {
 }
 
 func main() {
+
 	fmt.Println(Hello("world", ""))
+
+	// depinj.Greet(os.Stdout, "Elodie")
+	// http.ListenAndServe(":5000", http.HandlerFunc(depinj.MyGreeterHandler))
+
+	sleeper := &mock.ConfigurableSleeper{DurationConfig: 1 * time.Second, SleepConfig: time.Sleep}
+	mock.Countdown(os.Stdout, sleeper)
+
 }
